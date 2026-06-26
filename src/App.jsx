@@ -15,15 +15,52 @@ export default function App() {
 
   useEffect(() => {
     // TODO (Part 1): fetch `${API_URL}/api/recipes`, convert the response to JSON, and setRecipes with it
+      const fetchRecipe = async () => {
+        const response = await fetch(`${API_URL}/api/recipes`)
+        const data = await response.json();
+
+        setRecipes(data);
+        
+      };
+      fetchRecipe(); 
   }, [])
 
   function handleAddRecipe(newRecipe) {
     // TODO (Part 2): POST newRecipe to `${API_URL}/api/recipes`, then add the created recipe to `recipes`
+    async function addRecipe () {
+      const response = await fetch(`${API_URL}/api/recipes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newRecipe) 
+      });
+      const data = await response.json()
+        console.log('blajfbh')
+      setRecipes([...recipes, data])
+    }
+    addRecipe();
   }
 
   function handleDeleteRecipe(id) {
     // TODO (Part 3): DELETE `${API_URL}/api/recipes/${id}`, then remove that recipe from `recipes`
-  }
+      async function deleteRecipe () {
+        const resonse = await fetch(`${API_URL}/api/recipes/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+        })
+        
+      }
+      deleteRecipe();
+      const newRecipes = recipes.filter((recipe) => {
+          return recipe.id !== id; 
+      }) 
+      setRecipes(newRecipes);
+  
+    }   
 
   function handleToggleVegetarian(id) {
     // TODO (Stretch): PATCH `${API_URL}/api/recipes/${id}` to flip `vegetarian`, then update `recipes`
